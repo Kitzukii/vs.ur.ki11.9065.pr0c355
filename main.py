@@ -1,4 +1,4 @@
-import requests, os
+import requests, os, venv
 
 class GitRepo:
     def __init__(self,user,repo,branch):
@@ -17,13 +17,13 @@ class GitRepo:
 repo = GitRepo("Kitzukii","vs.ur.ki11.9065.pr0c355","main")
 meta = repo.getJsonFile("fs.json")
 
-filePrefix = meta.get("prefix","mods/")
-print(filePrefix[-1])
-if filePrefix[-1] == "/":
-    print("it has a slash on the end")
-
+filePrefix = meta.get("prefix","mods")
 filesToGet = meta.get("files",[])
+if not ( filePrefix[-1] == "/" ):
+    filePrefix = f"{filePrefix}/"
 
 for file in filesToGet:
-    fileContent = repo.getFile(filePrefix+file)
-    print(file,fileContent)
+    f = open(file,"w")
+    f.write(repo.getFile(filePrefix+file))
+    f.close()
+    print(f"Downloaded file: {file}")
