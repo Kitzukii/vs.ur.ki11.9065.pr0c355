@@ -1,2 +1,5 @@
 dist
 build
+main.exe
+main.spec
+*.7z
