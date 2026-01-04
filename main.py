@@ -30,7 +30,6 @@ class DownloaderGUI:
 
         self.status = tk.StringVar(value="Idle")
         self.progress = tk.IntVar(value=0)
-        self.currrent_file = "none"
 
         ttk.Label(root, text="Status:").pack(anchor="w", padx=10, pady=(10,0))
         ttk.Label(root, textvariable=self.status).pack(anchor="w", padx=20)
@@ -86,7 +85,6 @@ class DownloaderGUI:
             data = repo.getFile(prefix + file)
             with open(file, "wb") as f:
                 f.write(data)
-            self.currrent_file = file
         finally:
             with self.lock:
                 self.completed += 1
@@ -99,7 +97,7 @@ class DownloaderGUI:
         if total > 0:
             percent = int((done / total) * 100)
             self.progress.set(percent)
-            self.status.set(f"Downloaded {done}/{total}\nCurrent: {file}")
+            self.status.set(f"Downloaded {done}/{total}")
 
         if total > 0 and done >= total and not self.finished:
             self.finish()
@@ -110,8 +108,8 @@ class DownloaderGUI:
     def finish(self):
         self.finished = True
         self.progress.set(100)
-        self.status.set("Finished downloading. Closing in 5s.")
-        self.root.after(5000, self.root.destroy)
+        self.status.set("Finished downloading.\nYou can now close this window.\nEnjoy!")
+        # self.root.after(5000, self.root.destroy)
 
 if __name__ == "__main__":
     root = tk.Tk()
